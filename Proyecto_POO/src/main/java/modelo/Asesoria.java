@@ -6,8 +6,10 @@ package modelo;
 
 /**
  *
- * @author Santiago
+ * @author Luis soto
  */
 public class Asesoria {
+    
+    
     
 }
