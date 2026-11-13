@@ -8,8 +8,18 @@ package vista;
  *
  * @author Luis Garcia
  */
+import modelo.Alumno;
+import modelo.AlumnoEnPrueba;
+import modelo.AlumnoSinPrueba;
+import modelo.Asignatura;
+import modelo.Asesoria;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+
 public class UsaAlumno extends javax.swing.JFrame {
-    
+
+    private ArrayList<Alumno> losAlumnos = new ArrayList<>();
+    private ArrayList<Asignatura> lasAsignaturas = new ArrayList<>();
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(UsaAlumno.class.getName());
 
     /**
@@ -17,6 +27,39 @@ public class UsaAlumno extends javax.swing.JFrame {
      */
     public UsaAlumno() {
         initComponents();
+        jTextField1.setText("");
+        jTextField2.setText("");
+        jTextField3.setText("");
+        jTextField4.setText("");
+
+        jTextField5.setText("");
+        jTextField6.setText("");
+        jTextField7.setText("");
+        jTextField8.setText("");
+        jTextField10.setText("");
+
+        fieldFecha.setText("dd/MM/yyyy");
+
+        cuadroReportes.setText("");
+        cuadroReportes.setEditable(false);
+
+        jTextField3.setEnabled(true);
+        jTextField4.setEnabled(false);
+    }
+    
+    public Alumno buscarAlumno(ArrayList<Alumno> dato,
+                          int codigoDado) {
+
+    for (int i = 0; i < dato.size(); i++) {
+
+        Alumno obj = dato.get(i);
+
+        if (obj.getCodigo() == codigoDado) {
+            return obj;
+        }
+    }
+
+    return null;
     }
 
     /**
@@ -28,21 +71,467 @@ public class UsaAlumno extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        tipoAlumno = new javax.swing.JComboBox<>();
+        jLabel5 = new javax.swing.JLabel();
+        jTextField3 = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        jTextField4 = new javax.swing.JTextField();
+        registrarAlumno = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jTextField5 = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        jTextField6 = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jTextField7 = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
+        jTextField8 = new javax.swing.JTextField();
+        jLabel13 = new javax.swing.JLabel();
+        selectorModalidad = new javax.swing.JComboBox<>();
+        jLabel14 = new javax.swing.JLabel();
+        fieldFecha = new javax.swing.JTextField();
+        jLabel15 = new javax.swing.JLabel();
+        jTextField10 = new javax.swing.JTextField();
+        buttonResgisAsesoria = new javax.swing.JButton();
+        jLabel16 = new javax.swing.JLabel();
+        ListarAlumnos = new javax.swing.JButton();
+        consultarAlumnos = new javax.swing.JButton();
+        guardarDatos = new javax.swing.JButton();
+        recuperarDatos = new javax.swing.JButton();
+        buttonSalir = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        cuadroReportes = new javax.swing.JTextArea();
+        jLabel17 = new javax.swing.JLabel();
+        ingresarAsignatura = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel1.setText("Datos del alumno");
+
+        jLabel2.setText("Codigo: ");
+
+        jTextField1.setText("jTextField1");
+        jTextField1.addActionListener(this::jTextField1ActionPerformed);
+
+        jLabel3.setText("Nombre:");
+
+        jTextField2.setText("jTextField2");
+
+        jLabel4.setText("Tipo de alumno:");
+
+        tipoAlumno.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "sin prueba", "en prueba" }));
+        tipoAlumno.addActionListener(this::tipoAlumnoActionPerformed);
+
+        jLabel5.setText("Promedio:");
+
+        jTextField3.setText("jTextField3");
+
+        jLabel6.setText("Semestre:");
+
+        jTextField4.setText("jTextField4");
+
+        registrarAlumno.setText("Ingresar alumno");
+        registrarAlumno.addActionListener(this::registrarAlumnoActionPerformed);
+
+        jLabel7.setText("Datos de la asignatura");
+
+        jLabel8.setText("Codigo:");
+
+        jTextField5.setText("jTextField5");
+
+        jLabel9.setText("Nombre:");
+
+        jTextField6.setText("jTextField6");
+
+        jLabel10.setText("Registrar asesoria");
+
+        jLabel11.setText("Alumno(codigo):");
+
+        jTextField7.setText("jTextField7");
+
+        jLabel12.setText("Asignatura(Codigo):");
+
+        jTextField8.setText("jTextField8");
+
+        jLabel13.setText("Modalidad:");
+
+        selectorModalidad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Presencial", "Virtual" }));
+        selectorModalidad.addActionListener(this::selectorModalidadActionPerformed);
+
+        jLabel14.setText("Fecha:");
+
+        fieldFecha.setText("dd/mm/yy");
+        fieldFecha.addActionListener(this::fieldFechaActionPerformed);
+
+        jLabel15.setText("Duracion(Minutos):");
+
+        jTextField10.setText("jTextField10");
+
+        buttonResgisAsesoria.setText("Registrar asesoria");
+        buttonResgisAsesoria.addActionListener(this::buttonResgisAsesoriaActionPerformed);
+
+        jLabel16.setText("Operaciones");
+
+        ListarAlumnos.setText("Listar alumnos");
+
+        consultarAlumnos.setText("Consultar alumnos");
+        consultarAlumnos.addActionListener(this::consultarAlumnosActionPerformed);
+
+        guardarDatos.setText("Guardar datos");
+        guardarDatos.addActionListener(this::guardarDatosActionPerformed);
+
+        recuperarDatos.setText("Recuperar datos");
+        recuperarDatos.addActionListener(this::recuperarDatosActionPerformed);
+
+        buttonSalir.setText("Salir");
+        buttonSalir.addActionListener(this::buttonSalirActionPerformed);
+
+        cuadroReportes.setColumns(20);
+        cuadroReportes.setRows(5);
+        jScrollPane1.setViewportView(cuadroReportes);
+
+        jLabel17.setText("Reportes");
+
+        ingresarAsignatura.setText("Ingresar asignatura");
+        ingresarAsignatura.addActionListener(this::ingresarAsignaturaActionPerformed);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel10)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(12, 12, 12)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel5)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jLabel6)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel4)
+                                        .addGap(27, 27, 27)
+                                        .addComponent(tipoAlumno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabel3)
+                                            .addComponent(jLabel2))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)
+                                            .addComponent(jTextField2))))))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(118, 118, 118)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel16)
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(ListarAlumnos, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
+                                            .addComponent(guardarDatos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addGap(65, 65, 65)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(recuperarDatos, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(consultarAlumnos))
+                                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(243, 243, 243)
+                                .addComponent(buttonSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap())))))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(128, 128, 128)
+                        .addComponent(registrarAlumno, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(35, 35, 35)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel11)
+                            .addComponent(jLabel13)
+                            .addComponent(jLabel14))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(selectorModalidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(fieldFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(31, 31, 31)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel12)
+                                    .addComponent(jLabel15))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(buttonResgisAsesoria, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(45, 45, 45)
+                        .addComponent(jLabel8)
+                        .addGap(18, 18, 18)
+                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(32, 32, 32)
+                        .addComponent(jLabel9)
+                        .addGap(18, 18, 18)
+                        .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27)
+                        .addComponent(ingresarAsignatura)))
+                .addGap(24, 24, 24)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel17))
+                .addContainerGap(15, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel16)
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(ListarAlumnos, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(consultarAlumnos, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(11, 11, 11)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(19, 19, 19)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(tipoAlumno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6)
+                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(registrarAlumno, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel7)
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8)
+                            .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel9)
+                            .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ingresarAsignatura, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel10)
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel11)
+                            .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel12)
+                            .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel13)
+                            .addComponent(selectorModalidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel15)
+                            .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel14)
+                            .addComponent(fieldFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(buttonResgisAsesoria, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(guardarDatos, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(recuperarDatos, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(buttonSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(19, 19, 19)
+                        .addComponent(jLabel17)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(17, Short.MAX_VALUE))
+        );
+
+        jLabel1.getAccessibleContext().setAccessibleName("Datos de alumnos");
+        jLabel1.getAccessibleContext().setAccessibleDescription("");
+        jTextField1.getAccessibleContext().setAccessibleName("");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void fieldFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldFechaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fieldFechaActionPerformed
+
+    private void buttonResgisAsesoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonResgisAsesoriaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_buttonResgisAsesoriaActionPerformed
+
+    private void registrarAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarAlumnoActionPerformed
+
+        try {
+            // Capturar datos de la GUI
+            int codigo = Integer.parseInt(
+                    jTextField1.getText().trim());
+
+            String nombre = jTextField2.getText().trim();
+
+            String tipo = tipoAlumno.getSelectedItem().toString();
+
+            // Validar los datos
+            if (codigo <= 0 || nombre.isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "Ingrese un código y nombre válidos.");
+                return;
+            }
+
+            // Verificar que no exista previamente
+            if (buscarAlumno(losAlumnos, codigo) != null) {
+                JOptionPane.showMessageDialog(this,
+                        "Ya existe un alumno con ese código.");
+                return;
+            }
+
+            Alumno nuevo;
+
+            if (tipo.equals("en prueba")) {
+
+                double promedio = Double.parseDouble(
+                        jTextField3.getText().trim());
+
+                if (!Double.isFinite(promedio)
+                        || promedio < 0 || promedio > 5) {
+                    JOptionPane.showMessageDialog(this,
+                            "El promedio debe estar entre 0 y 5.");
+                    return;
+                }
+
+                nuevo = new AlumnoEnPrueba(
+                        promedio, codigo, nombre);
+
+            } else {
+
+                int semestre = Integer.parseInt(
+                        jTextField4.getText().trim());
+
+                if (semestre <= 0) {
+                    JOptionPane.showMessageDialog(this,
+                            "Ingrese un semestre válido.");
+                    return;
+                }
+
+                nuevo = new AlumnoSinPrueba(
+                        semestre, codigo, nombre);
+            }
+
+            // Almacenar el alumno en la colección
+            losAlumnos.add(nuevo);
+
+            // Mostrar resultado
+            cuadroReportes.setText(
+                    "Alumno registrado correctamente\n\n"
+                    + nuevo.toString());
+
+            // Limpiar campos
+            jTextField1.setText("");
+            jTextField2.setText("");
+            jTextField3.setText("");
+            jTextField4.setText("");
+
+        } catch (NumberFormatException e) {
+
+            JOptionPane.showMessageDialog(this,
+                    "Verifique los valores numéricos ingresados.");
+        }
+
+    }//GEN-LAST:event_registrarAlumnoActionPerformed
+
+    private void buttonSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSalirActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_buttonSalirActionPerformed
+
+    private void recuperarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recuperarDatosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_recuperarDatosActionPerformed
+
+    private void consultarAlumnosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultarAlumnosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_consultarAlumnosActionPerformed
+
+    private void guardarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarDatosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_guardarDatosActionPerformed
+
+    private void selectorModalidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectorModalidadActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_selectorModalidadActionPerformed
+
+    private void tipoAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tipoAlumnoActionPerformed
+        String tipo = tipoAlumno.getSelectedItem().toString();
+
+        if (tipo.equals("en prueba")) {
+            jTextField3.setEnabled(true);
+            jTextField4.setEnabled(false);
+            jTextField4.setText("");
+        } else {
+            jTextField3.setEnabled(false);
+            jTextField4.setEnabled(true);
+            jTextField3.setText("");
+        }
+    }//GEN-LAST:event_tipoAlumnoActionPerformed
+
+    private void ingresarAsignaturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ingresarAsignaturaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ingresarAsignaturaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -70,5 +559,45 @@ public class UsaAlumno extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton ListarAlumnos;
+    private javax.swing.JButton buttonResgisAsesoria;
+    private javax.swing.JButton buttonSalir;
+    private javax.swing.JButton consultarAlumnos;
+    private javax.swing.JTextArea cuadroReportes;
+    private javax.swing.JTextField fieldFecha;
+    private javax.swing.JButton guardarDatos;
+    private javax.swing.JButton ingresarAsignatura;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField10;
+    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextField3;
+    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTextField jTextField5;
+    private javax.swing.JTextField jTextField6;
+    private javax.swing.JTextField jTextField7;
+    private javax.swing.JTextField jTextField8;
+    private javax.swing.JButton recuperarDatos;
+    private javax.swing.JButton registrarAlumno;
+    private javax.swing.JComboBox<String> selectorModalidad;
+    private javax.swing.JComboBox<String> tipoAlumno;
     // End of variables declaration//GEN-END:variables
 }
