@@ -26,7 +26,7 @@ import java.io.FileNotFoundException;
 import java.io.ObjectInputStream;
 import java.io.File;
 
-public class UsaAlumno extends javax.swing.JFrame {
+public class UsaAlumno extends javax.swing.JFrame implements Listado, Persistencia {
 
     private ArrayList<Alumno> losAlumnos = new ArrayList<>();
     private ArrayList<Asignatura> lasAsignaturas = new ArrayList<>();
