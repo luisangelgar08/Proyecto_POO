@@ -118,6 +118,7 @@ public class UsaAlumno extends javax.swing.JFrame implements Listado, Persistenc
         }
     }
     
+    @Override
     public String listarAlumnos(ArrayList<Alumno> dato) {
 
         String res = "LISTADO DE ALUMNOS\n\n";
@@ -147,6 +148,7 @@ public class UsaAlumno extends javax.swing.JFrame implements Listado, Persistenc
         return res;
     }
 
+    @Override
     public String consultarAlumno(ArrayList<Alumno> dato,
                                  int codigoDado) {
 
@@ -160,6 +162,23 @@ public class UsaAlumno extends javax.swing.JFrame implements Listado, Persistenc
 
         res += "Código: " + objAlumno.getCodigo() + "\n";
         res += "Nombre: " + objAlumno.getNombre() + "\n";
+        // Mostrar datos según el tipo de alumno
+        if (objAlumno instanceof AlumnoEnPrueba) {
+
+            AlumnoEnPrueba alumnoPrueba =
+                    (AlumnoEnPrueba) objAlumno;
+
+            res += "Promedio: "
+                    + alumnoPrueba.getPromedio() + "\n";
+
+        } else if (objAlumno instanceof AlumnoSinPrueba) {
+
+            AlumnoSinPrueba alumnoSinPrueba =
+                    (AlumnoSinPrueba) objAlumno;
+
+            res += "Semestre: "
+                    + alumnoSinPrueba.getSemestre() + "\n";
+        }
         res += "Aprovechamiento: "
                 + objAlumno.calcularAprovechamiento() + "\n";
         res += "Número de asesorías: "
@@ -201,6 +220,7 @@ public class UsaAlumno extends javax.swing.JFrame implements Listado, Persistenc
         return res;
     }
 
+    @Override
     public void guardarAsignaturas(ArrayList<Asignatura> dato) {
 
         try (ObjectOutputStream salida =
@@ -226,6 +246,7 @@ public class UsaAlumno extends javax.swing.JFrame implements Listado, Persistenc
         }
     }
 
+    @Override
     public void guardarAlumnos(ArrayList<Alumno> dato) {
 
         try (ObjectOutputStream salida =
@@ -252,6 +273,7 @@ public class UsaAlumno extends javax.swing.JFrame implements Listado, Persistenc
     }
     
     @SuppressWarnings("unchecked")
+    @Override
     public ArrayList<Alumno> recuperarAlumnos() {
 
         try (ObjectInputStream entrada =
@@ -280,6 +302,7 @@ public class UsaAlumno extends javax.swing.JFrame implements Listado, Persistenc
     }
     
     @SuppressWarnings("unchecked")
+    @Override
     public ArrayList<Asignatura> recuperarAsignaturas() {
 
         try (ObjectInputStream entrada =
@@ -311,36 +334,52 @@ public class UsaAlumno extends javax.swing.JFrame implements Listado, Persistenc
 
         // Crear asignaturas
         Asignatura objA1 = new Asignatura(
-                "POO01", "Programacion Orientada a Objetos");
+                "POO", "Programación Orientada a Objetos");
 
         Asignatura objA2 = new Asignatura(
-                "MAT02", "Calculo Integral");
+                "AvP", "Algoritmia y Programación");
+
+        Asignatura objA3 = new Asignatura(
+                "EDyA1", "Estructura de Datos y Algoritmos 1");
+
+        Asignatura objA4 = new Asignatura(
+                "BD1", "Bases de Datos 1");
 
         lasAsignaturas.add(objA1);
         lasAsignaturas.add(objA2);
+        lasAsignaturas.add(objA3);
+        lasAsignaturas.add(objA4);
 
 
         // Crear alumnos
         Alumno objAlumno1 = new AlumnoEnPrueba(
-                2.8, 2233409, "Mario Rios");
+                2.8, 2233409, "Mario Ríos");
 
         Alumno objAlumno2 = new AlumnoSinPrueba(
-                3, 2241834, "Camila Ramirez");
+                2, 2241834, "Camila Ramírez");
 
         Alumno objAlumno3 = new AlumnoSinPrueba(
-                2, 2201000, "Andres Lopez");
+                5, 2219045, "Walter Malagón");
+
+        Alumno objAlumno4 = new AlumnoEnPrueba(
+                2.5, 2228342, "Bernardo Guzmán");
+
+        Alumno objAlumno5 = new AlumnoEnPrueba(
+                3.1, 2211834, "Jenifer Valencia");
 
         losAlumnos.add(objAlumno1);
         losAlumnos.add(objAlumno2);
         losAlumnos.add(objAlumno3);
+        losAlumnos.add(objAlumno4);
+        losAlumnos.add(objAlumno5);
 
 
         // Primera asesoría de Mario
         Asesoria objAsesoria1 = new Asesoria(
                 objA1,
-                "Presencial",
-                LocalDate.of(2026, 11, 11),
-                30);
+                "Virtual",
+                LocalDate.of(2026, 8, 12),
+                15);
 
         objAlumno1.adicionarAsesoria(objAsesoria1);
 
@@ -348,9 +387,9 @@ public class UsaAlumno extends javax.swing.JFrame implements Listado, Persistenc
         // Segunda asesoría de Mario
         Asesoria objAsesoria2 = new Asesoria(
                 objA1,
-                "Virtual",
-                LocalDate.of(2026, 11, 12),
-                25);
+                "Presencial",
+                LocalDate.of(2026, 8, 28),
+                20);
 
         objAlumno1.adicionarAsesoria(objAsesoria2);
 
@@ -359,10 +398,30 @@ public class UsaAlumno extends javax.swing.JFrame implements Listado, Persistenc
         Asesoria objAsesoria3 = new Asesoria(
                 objA2,
                 "Presencial",
-                LocalDate.of(2026, 11, 13),
-                40);
+                LocalDate.of(2026, 8, 11),
+                22);
 
         objAlumno2.adicionarAsesoria(objAsesoria3);
+
+
+        // Primera asesoría de Walter
+        Asesoria objAsesoria4 = new Asesoria(
+                objA4,
+                "Presencial",
+                LocalDate.of(2026, 10, 9),
+                25);
+
+        objAlumno3.adicionarAsesoria(objAsesoria4);
+
+
+        // Segunda asesoría de Walter
+        Asesoria objAsesoria5 = new Asesoria(
+                objA3,
+                "Virtual",
+                LocalDate.of(2026, 10, 14),
+                15);
+
+        objAlumno3.adicionarAsesoria(objAsesoria5);
 
     }
     
