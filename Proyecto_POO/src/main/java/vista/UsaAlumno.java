@@ -13,14 +13,26 @@ import modelo.AlumnoEnPrueba;
 import modelo.AlumnoSinPrueba;
 import modelo.Asignatura;
 import modelo.Asesoria;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.io.IOException;
+import java.io.NotSerializableException;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.ObjectInputStream;
+import java.io.File;
 
 public class UsaAlumno extends javax.swing.JFrame {
 
     private ArrayList<Alumno> losAlumnos = new ArrayList<>();
     private ArrayList<Asignatura> lasAsignaturas = new ArrayList<>();
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(UsaAlumno.class.getName());
+    private static final String ARCHIVO_ALUMNOS = "alumnos.obj";
+    private static final String ARCHIVO_ASIGNATURAS = "asignaturas.obj";
 
     /**
      * Creates new form UsaAlumno
@@ -45,23 +57,315 @@ public class UsaAlumno extends javax.swing.JFrame {
 
         jTextField3.setEnabled(true);
         jTextField4.setEnabled(false);
+        
+        if (!new File(ARCHIVO_ALUMNOS).exists()
+                && !new File(ARCHIVO_ASIGNATURAS).exists()) {
+
+            cargarDatosIniciales();
+        }
     }
     
     public Alumno buscarAlumno(ArrayList<Alumno> dato,
                           int codigoDado) {
 
-    for (int i = 0; i < dato.size(); i++) {
+        for (int i = 0; i < dato.size(); i++) {
 
-        Alumno obj = dato.get(i);
+            Alumno obj = dato.get(i);
 
-        if (obj.getCodigo() == codigoDado) {
-            return obj;
+            if (obj.getCodigo() == codigoDado) {
+                return obj;
+            }
+        }
+
+        return null;
+    }
+    
+    public Asignatura buscarAsignatura(ArrayList<Asignatura> dato,
+                                  String codigoDado) {
+
+        Asignatura obj;
+
+        for (int i = 0; i < dato.size(); i++) {
+
+            obj = dato.get(i);
+
+            if (obj.getCodigo().equalsIgnoreCase(codigoDado)) {
+                return obj;
+            }
+        }
+
+        return null;
+    }
+    
+    public void ordenarAlumnos(ArrayList<Alumno> dato) {
+
+        Alumno aux;
+
+        for (int i = 0; i < dato.size() - 1; i++) {
+
+            for (int j = 0; j < dato.size() - 1 - i; j++) {
+
+                if (dato.get(j).getCodigo() >
+                        dato.get(j + 1).getCodigo()) {
+
+                    aux = dato.get(j);
+
+                    dato.set(j, dato.get(j + 1));
+
+                    dato.set(j + 1, aux);
+                }
+            }
+        }
+    }
+    
+    public String listarAlumnos(ArrayList<Alumno> dato) {
+
+        String res = "LISTADO DE ALUMNOS\n\n";
+
+        if (dato.isEmpty()) {
+            return "No hay alumnos registrados.";
+        }
+
+        // Ordenar los alumnos por código
+        ordenarAlumnos(dato);
+
+        Alumno obj;
+
+        for (int i = 0; i < dato.size(); i++) {
+
+            obj = dato.get(i);
+
+            res += "Código: " + obj.getCodigo() + "\n"
+                    + "Nombre: " + obj.getNombre() + "\n"
+                    + "Aprovechamiento: "
+                    + obj.calcularAprovechamiento() + "\n"
+                    + "Número de asesorías: "
+                    + obj.getNumeroAsesorias() + "\n"
+                    + "--------------------------------\n";
+        }
+
+        return res;
+    }
+
+    public String consultarAlumno(ArrayList<Alumno> dato,
+                                 int codigoDado) {
+
+        Alumno objAlumno = buscarAlumno(dato, codigoDado);
+
+        if (objAlumno == null) {
+            return "No existe un alumno con ese código.";
+        }
+
+        String res = "CONSULTA DE ALUMNO\n\n";
+
+        res += "Código: " + objAlumno.getCodigo() + "\n";
+        res += "Nombre: " + objAlumno.getNombre() + "\n";
+        res += "Aprovechamiento: "
+                + objAlumno.calcularAprovechamiento() + "\n";
+        res += "Número de asesorías: "
+                + objAlumno.getNumeroAsesorias() + "\n\n";
+
+        res += "ASESORÍAS RECIBIDAS\n";
+        res += "------------------------------\n";
+
+        if (objAlumno.getAsesorias().isEmpty()) {
+            res += "El alumno no tiene asesorías registradas.\n";
+        }
+
+        Asesoria objAsesoria;
+
+        for (int i = 0; i < objAlumno.getAsesorias().size(); i++) {
+
+            objAsesoria = objAlumno.getAsesorias().get(i);
+
+            res += "\nAsesoría " + (i + 1) + "\n";
+
+            res += "Asignatura: "
+                    + objAsesoria.getAsignatura().getNombre() + "\n";
+
+            res += "Modalidad: "
+                    + objAsesoria.getModalidad() + "\n";
+
+            res += "Fecha: "
+                    + objAsesoria.getFecha() + "\n";
+
+            res += "Duración: "
+                    + objAsesoria.getMinutos() + " minutos\n";
+
+            res += "Esfuerzo: "
+                    + objAsesoria.calcularEsfuerzo() + " unidades\n";
+
+            res += "------------------------------\n";
+        }
+
+        return res;
+    }
+
+    public void guardarAsignaturas(ArrayList<Asignatura> dato) {
+
+        try (ObjectOutputStream salida =
+                new ObjectOutputStream(
+                        new FileOutputStream(ARCHIVO_ASIGNATURAS))) {
+
+            salida.writeObject(dato);
+
+            JOptionPane.showMessageDialog(this,
+                    "Asignaturas guardadas correctamente.");
+
+        } catch (NotSerializableException e) {
+
+            JOptionPane.showMessageDialog(this,
+                    "Error: un objeto no es serializable.\n"
+                    + e.getMessage());
+
+        } catch (IOException e) {
+
+            JOptionPane.showMessageDialog(this,
+                    "Error al guardar las asignaturas.\n"
+                    + e.getMessage());
         }
     }
 
-    return null;
-    }
+    public void guardarAlumnos(ArrayList<Alumno> dato) {
 
+        try (ObjectOutputStream salida =
+                new ObjectOutputStream(
+                        new FileOutputStream(ARCHIVO_ALUMNOS))) {
+
+            salida.writeObject(dato);
+
+            JOptionPane.showMessageDialog(this,
+                    "Alumnos guardados correctamente.");
+
+        } catch (NotSerializableException e) {
+
+            JOptionPane.showMessageDialog(this,
+                    "Error: un objeto no es serializable.\n"
+                    + e.getMessage());
+
+        } catch (IOException e) {
+
+            JOptionPane.showMessageDialog(this,
+                    "Error al guardar los alumnos.\n"
+                    + e.getMessage());
+        }
+    }
+    
+    @SuppressWarnings("unchecked")
+    public ArrayList<Alumno> recuperarAlumnos() {
+
+        try (ObjectInputStream entrada =
+                new ObjectInputStream(
+                        new FileInputStream(ARCHIVO_ALUMNOS))) {
+
+            ArrayList<Alumno> datos =
+                    (ArrayList<Alumno>) entrada.readObject();
+
+            return datos;
+
+        } catch (FileNotFoundException e) {
+
+            JOptionPane.showMessageDialog(this,
+                    "No se encontró el archivo de alumnos.");
+
+        } catch (IOException | ClassNotFoundException
+                | ClassCastException e) {
+
+            JOptionPane.showMessageDialog(this,
+                    "Error al recuperar los alumnos.\n"
+                    + e.getMessage());
+        }
+
+        return null;
+    }
+    
+    @SuppressWarnings("unchecked")
+    public ArrayList<Asignatura> recuperarAsignaturas() {
+
+        try (ObjectInputStream entrada =
+                new ObjectInputStream(
+                        new FileInputStream(ARCHIVO_ASIGNATURAS))) {
+
+            ArrayList<Asignatura> datos =
+                    (ArrayList<Asignatura>) entrada.readObject();
+
+            return datos;
+
+        } catch (FileNotFoundException e) {
+
+            JOptionPane.showMessageDialog(this,
+                    "No se encontró el archivo de asignaturas.");
+
+        } catch (IOException | ClassNotFoundException
+                | ClassCastException e) {
+
+            JOptionPane.showMessageDialog(this,
+                    "Error al recuperar las asignaturas.\n"
+                    + e.getMessage());
+        }
+
+        return null;
+    }
+    
+    private void cargarDatosIniciales() {
+
+        // Crear asignaturas
+        Asignatura objA1 = new Asignatura(
+                "POO01", "Programacion Orientada a Objetos");
+
+        Asignatura objA2 = new Asignatura(
+                "MAT02", "Calculo Integral");
+
+        lasAsignaturas.add(objA1);
+        lasAsignaturas.add(objA2);
+
+
+        // Crear alumnos
+        Alumno objAlumno1 = new AlumnoEnPrueba(
+                2.8, 2233409, "Mario Rios");
+
+        Alumno objAlumno2 = new AlumnoSinPrueba(
+                3, 2241834, "Camila Ramirez");
+
+        Alumno objAlumno3 = new AlumnoSinPrueba(
+                2, 2201000, "Andres Lopez");
+
+        losAlumnos.add(objAlumno1);
+        losAlumnos.add(objAlumno2);
+        losAlumnos.add(objAlumno3);
+
+
+        // Primera asesoría de Mario
+        Asesoria objAsesoria1 = new Asesoria(
+                objA1,
+                "Presencial",
+                LocalDate.of(2026, 11, 11),
+                30);
+
+        objAlumno1.adicionarAsesoria(objAsesoria1);
+
+
+        // Segunda asesoría de Mario
+        Asesoria objAsesoria2 = new Asesoria(
+                objA1,
+                "Virtual",
+                LocalDate.of(2026, 11, 12),
+                25);
+
+        objAlumno1.adicionarAsesoria(objAsesoria2);
+
+
+        // Primera asesoría de Camila
+        Asesoria objAsesoria3 = new Asesoria(
+                objA2,
+                "Presencial",
+                LocalDate.of(2026, 11, 13),
+                40);
+
+        objAlumno2.adicionarAsesoria(objAsesoria3);
+
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -181,6 +485,7 @@ public class UsaAlumno extends javax.swing.JFrame {
         jLabel16.setText("Operaciones");
 
         ListarAlumnos.setText("Listar alumnos");
+        ListarAlumnos.addActionListener(this::ListarAlumnosActionPerformed);
 
         consultarAlumnos.setText("Consultar alumnos");
         consultarAlumnos.addActionListener(this::consultarAlumnosActionPerformed);
@@ -407,7 +712,94 @@ public class UsaAlumno extends javax.swing.JFrame {
     }//GEN-LAST:event_fieldFechaActionPerformed
 
     private void buttonResgisAsesoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonResgisAsesoriaActionPerformed
-        // TODO add your handling code here:
+        try {
+
+            // Capturar los datos de la interfaz
+            int codigoAlumno = Integer.parseInt(
+                    jTextField7.getText().trim());
+
+            String codigoAsignatura = jTextField8.getText().trim();
+
+            String modalidad = selectorModalidad.getSelectedItem().toString();
+
+            String fechaTexto = fieldFecha.getText().trim();
+
+            int minutos = Integer.parseInt(
+                    jTextField10.getText().trim());
+
+            // Buscar el alumno
+            Alumno objAlumno = buscarAlumno(
+                    losAlumnos, codigoAlumno);
+
+            if (objAlumno == null) {
+
+                JOptionPane.showMessageDialog(this,
+                        "El alumno no está registrado.");
+
+                return;
+            }
+
+            // Buscar la asignatura
+            Asignatura objAsignatura = buscarAsignatura(
+                    lasAsignaturas, codigoAsignatura);
+
+            if (objAsignatura == null) {
+
+                JOptionPane.showMessageDialog(this,
+                        "La asignatura no está registrada.");
+
+                return;
+            }
+
+            // Validar la duración
+            if (minutos <= 0) {
+
+                JOptionPane.showMessageDialog(this,
+                        "La duración debe ser mayor que cero.");
+
+                return;
+            }
+
+            // Convertir la fecha
+            DateTimeFormatter formato =
+                    DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+            LocalDate fecha = LocalDate.parse(
+                    fechaTexto, formato);
+
+            // Crear el objeto Asesoria
+            Asesoria nueva = new Asesoria(
+                    objAsignatura, modalidad, fecha, minutos);
+
+            // Adicionar la asesoría al alumno
+            int esfuerzo = objAlumno.adicionarAsesoria(nueva);
+
+            // Mostrar el resultado
+            cuadroReportes.setText(
+                    "Asesoría registrada correctamente\n\n"
+                    + "Alumno: " + objAlumno.getNombre() + "\n"
+                    + "Asignatura: " + objAsignatura.getNombre() + "\n"
+                    + "Modalidad: " + modalidad + "\n"
+                    + "Fecha: " + fecha + "\n"
+                    + "Duración: " + minutos + " minutos\n"
+                    + "Esfuerzo: " + esfuerzo + " unidades");
+
+            // Limpiar los campos
+            jTextField7.setText("");
+            jTextField8.setText("");
+            jTextField10.setText("");
+            fieldFecha.setText("dd/MM/yyyy");
+
+        } catch (NumberFormatException e) {
+
+            JOptionPane.showMessageDialog(this,
+                    "Verifique los valores numéricos ingresados.");
+
+        } catch (java.time.format.DateTimeParseException e) {
+
+            JOptionPane.showMessageDialog(this,
+                    "La fecha debe tener el formato dd/MM/yyyy.");
+        }
     }//GEN-LAST:event_buttonResgisAsesoriaActionPerformed
 
     private void registrarAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarAlumnoActionPerformed
@@ -490,19 +882,67 @@ public class UsaAlumno extends javax.swing.JFrame {
     }//GEN-LAST:event_registrarAlumnoActionPerformed
 
     private void buttonSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSalirActionPerformed
-        // TODO add your handling code here:
+        int opcion = JOptionPane.showConfirmDialog(
+                this,
+                "¿Está seguro de que desea salir?\n"
+                + "Recuerde guardar los datos antes de salir.",
+                "Confirmar salida",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (opcion == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
     }//GEN-LAST:event_buttonSalirActionPerformed
 
     private void recuperarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recuperarDatosActionPerformed
-        // TODO add your handling code here:
+        ArrayList<Alumno> alumnosRecuperados =
+                recuperarAlumnos();
+
+        ArrayList<Asignatura> asignaturasRecuperadas =
+                recuperarAsignaturas();
+
+        if (alumnosRecuperados != null
+                && asignaturasRecuperadas != null) {
+
+            losAlumnos = alumnosRecuperados;
+
+            lasAsignaturas = asignaturasRecuperadas;
+
+            JOptionPane.showMessageDialog(this,
+                    "Datos recuperados correctamente.");
+
+            cuadroReportes.setText(
+                    listarAlumnos(losAlumnos));
+        }
     }//GEN-LAST:event_recuperarDatosActionPerformed
 
     private void consultarAlumnosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultarAlumnosActionPerformed
-        // TODO add your handling code here:
+        String codigoTexto = JOptionPane.showInputDialog(
+                this, "Ingrese el código del alumno:");
+
+        if (codigoTexto == null) {
+            return;
+        }
+
+        try {
+
+            int codigoDado = Integer.parseInt(codigoTexto.trim());
+
+            cuadroReportes.setText(
+                    consultarAlumno(losAlumnos, codigoDado));
+
+        } catch (NumberFormatException e) {
+
+            JOptionPane.showMessageDialog(this,
+                    "Debe ingresar un código numérico válido.");
+        }
     }//GEN-LAST:event_consultarAlumnosActionPerformed
 
     private void guardarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarDatosActionPerformed
-        // TODO add your handling code here:
+        guardarAlumnos(losAlumnos);
+
+        guardarAsignaturas(lasAsignaturas);
     }//GEN-LAST:event_guardarDatosActionPerformed
 
     private void selectorModalidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectorModalidadActionPerformed
@@ -524,8 +964,48 @@ public class UsaAlumno extends javax.swing.JFrame {
     }//GEN-LAST:event_tipoAlumnoActionPerformed
 
     private void ingresarAsignaturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ingresarAsignaturaActionPerformed
-        // TODO add your handling code here:
+        String codigo = jTextField5.getText().trim();
+        String nombre = jTextField6.getText().trim();
+
+        // Verificar que los campos no estén vacíos
+        if (codigo.isEmpty() || nombre.isEmpty()) {
+
+            JOptionPane.showMessageDialog(this,
+                    "Debe ingresar el código y nombre de la asignatura.");
+
+            return;
+        }
+
+        // Verificar que la asignatura no exista
+        if (buscarAsignatura(lasAsignaturas, codigo) != null) {
+
+            JOptionPane.showMessageDialog(this,
+                    "Ya existe una asignatura con ese código.");
+
+            return;
+        }
+
+        // Crear el objeto Asignatura
+        Asignatura nueva = new Asignatura(codigo, nombre);
+
+        // Agregar la asignatura a la colección
+        lasAsignaturas.add(nueva);
+
+        // Mostrar resultado
+        cuadroReportes.setText(
+                "Asignatura registrada correctamente\n\n"
+                + nueva.toString());
+
+        // Limpiar los campos
+        jTextField5.setText("");
+        jTextField6.setText("");        
     }//GEN-LAST:event_ingresarAsignaturaActionPerformed
+
+    private void ListarAlumnosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ListarAlumnosActionPerformed
+        cuadroReportes.setText(
+        listarAlumnos(losAlumnos)
+        );
+    }//GEN-LAST:event_ListarAlumnosActionPerformed
 
     /**
      * @param args the command line arguments

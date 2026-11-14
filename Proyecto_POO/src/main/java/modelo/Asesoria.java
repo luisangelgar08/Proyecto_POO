@@ -9,8 +9,9 @@ package modelo;
  * @author Luis soto
  */ 
 import java.time.LocalDate;
+import java.io.Serializable;
 
-public class Asesoria {
+public class Asesoria implements Serializable {
 
     // Constantes (static final)
     private static final int MIN_UNIDAD_PRESENCIAL = 10;
